@@ -1,0 +1,29 @@
+.input {
+    all: unset;
+    outline: revert;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.line {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 30px 1fr;
+    align-items: center;
+}
+
+.container > * {
+    font-family: "Roboto Light", sans-serif;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1rem;
+}
+
+.container {
+    display: grid;
+    row-gap: 10px;
+    margin-top: 15px;
+}
+
+

@@ -1,9 +1,9 @@
 import './App.css'
-import {DataList} from "./DataList.tsx";
+import {FrontPage} from "./FrontPage.tsx";
 
 function App() {
 
-  return (<DataList></DataList>)
+  return (<FrontPage></FrontPage>)
 }
 
 export default App

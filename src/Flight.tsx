@@ -7,7 +7,8 @@ function Flight (props: Props) {
 
     return (
         <>
-            {props.item}
+            <p>{props.item.flight.carrier.caption}</p>
+
         </>
     )
 
