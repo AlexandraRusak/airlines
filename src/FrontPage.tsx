@@ -10,6 +10,7 @@ function FrontPage() {
 
     const [allFlights, setAllFlights] = useState<IFlightWithToken[]>([])
     const [bestDirectFlights, setBestDirectFlights] = useState<IBestFlight[]>([])
+    const [bestOneConnection, setBestOneConnection] = useState<IBestFlight[]>([])
     const [sortCriteria, setSortCriteria] = useState<string>("")
     const [fromPrice, setFromPrice] = useState<string>("")
     const [belowPrice, setBelowPrice] = useState<string>("")
@@ -134,6 +135,17 @@ function FrontPage() {
 
     // для списка айдишников авиакомпаний
     // const airlineUids: string[] = []
+    const uniqueAirlinesDirect = ()=>{
+        bestDirectFlights
+    }
+    const uniqueAirlinesOneConnection =() => {
+        bestOneConnection
+    }
+
+    const combinedAirlines = () => {
+
+    }
+
 
     const flightsToDisplay = useMemo(
         () => defineFlightsToDisplay(
@@ -161,6 +173,7 @@ function FrontPage() {
             .then(res => res.json())
             .then(data => {
                 setBestDirectFlights(data.result.bestPrices.DIRECT.bestFlights)
+                setBestOneConnection(data.result.bestPrices.ONE_CONNECTION.bestFlights)
                 setAllFlights(data.result.flights)
             })
             .catch(error => {
