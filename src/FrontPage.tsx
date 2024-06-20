@@ -4,22 +4,22 @@ import {useEffect, useMemo, useState} from "react";
 import {IFlightWithToken} from "./interfaces/iFlightWithToken.tsx";
 // import {Spinner} from "./Spinner.tsx";
 import {Button, Container} from "@mui/material";
+import {IBestFlight} from "./interfaces/iBestFlight.tsx";
 
 function FrontPage() {
 
     const [allFlights, setAllFlights] = useState<IFlightWithToken[]>([])
-    const [displayFlights, setDisplayFlights] = useState<IFlightWithToken[]>([])
-
+    const [bestDirectFlights, setBestDirectFlights] = useState<IBestFlight[]>([])
     const [sortCriteria, setSortCriteria] = useState<string>("")
-    // const [filterCriteria, setFilterCriteria] = useState<string>("")
     const [fromPrice, setFromPrice] = useState<string>("")
     const [belowPrice, setBelowPrice] = useState<string>("")
     const [connections, setConnections] = useState<string[]>([])
     const [visibleElements, setVisibleElements] = useState<number>(2)
+    const [airlineUids, setAirlineUids] = useState<string[]>([])
     // const [isLoading, setIsLoading] = useState(false);
 
     const handleShowMore = () => {
-        setVisibleElements(visibleElements+1)
+        setVisibleElements(visibleElements + 1)
     }
 
     function filterConnections(
@@ -27,9 +27,9 @@ function FrontPage() {
         connectionsNumbers: string[]) {
         return flights.filter((
             flight) => {
-            const result = connectionsNumbers.includes((flight.flight.legs[0].segments.length-1).toString())
-            return result && connectionsNumbers.includes((flight.flight.legs[1].segments.length-1).toString())
-        } )
+            const result = connectionsNumbers.includes((flight.flight.legs[0].segments.length - 1).toString())
+            return result && connectionsNumbers.includes((flight.flight.legs[1].segments.length - 1).toString())
+        })
     }
 
     function filterAirlines(
@@ -38,7 +38,7 @@ function FrontPage() {
         return flights.filter((
             flight) => {
             return airlineUids.includes((flight.flight.carrier.uid))
-        } )
+        })
     }
 
     function filterPrices(
@@ -48,18 +48,18 @@ function FrontPage() {
         return flights.filter((
             flight) => {
             const priceNumber = Number(flight.flight.price.total.amount)
-            return ((priceNumber>=minPrice)&&(priceNumber<=maxPrice))
-        } )
+            return ((priceNumber >= minPrice) && (priceNumber <= maxPrice))
+        })
     }
 
     const defineFlightsToDisplay = (
-            allFlights:IFlightWithToken[],
-            sortCriteria:string,
-            connections: string[],
-            fromPrice: string,
-            belowPrice: string,
-            elements: number,
-            airlineUids: string[]) => {
+        allFlights: IFlightWithToken[],
+        sortCriteria: string,
+        connections: string[],
+        fromPrice: string,
+        belowPrice: string,
+        elements: number,
+        airlineUids: string[]) => {
         let filteredFlights: IFlightWithToken[] = allFlights
 
         // Флаги не сделаны. Заделка на неактивные элементы в sidebar
@@ -69,7 +69,7 @@ function FrontPage() {
         // }
 
         // Фильтрация по пересадкам
-        if (connections.length>0) {
+        if (connections.length > 0) {
             filteredFlights = filterConnections(
                 filteredFlights,
                 connections)
@@ -78,8 +78,12 @@ function FrontPage() {
         // Фильтрация по стоимости
         let fromPriceNumber = 0
         let belowPriceNumber = 999999999
-        if (fromPrice) { fromPriceNumber = Number(fromPrice) }
-        if (belowPrice) { belowPriceNumber = Number(belowPrice) }
+        if (fromPrice) {
+            fromPriceNumber = Number(fromPrice)
+        }
+        if (belowPrice) {
+            belowPriceNumber = Number(belowPrice)
+        }
         if (fromPrice || belowPrice) {
             filteredFlights = filterPrices(
                 filteredFlights,
@@ -88,7 +92,7 @@ function FrontPage() {
         }
 
         // Фильтрация по авиакомпаниям
-        if (airlineUids.length>0) {
+        if (airlineUids.length > 0) {
             filteredFlights = filterAirlines(
                 filteredFlights,
                 airlineUids)
@@ -99,13 +103,13 @@ function FrontPage() {
             if (sortCriteria == 'priceAscending') {
                 filteredFlights = filteredFlights.sort(
                     (a, b) => {
-                        return Number(a.flight.price.total.amount)-Number(b.flight.price.total.amount)
+                        return Number(a.flight.price.total.amount) - Number(b.flight.price.total.amount)
                     })
             }
             if (sortCriteria == 'priceDescending') {
                 filteredFlights = filteredFlights.sort(
                     (a, b) => {
-                        return Number(b.flight.price.total.amount)-Number(a.flight.price.total.amount)
+                        return Number(b.flight.price.total.amount) - Number(a.flight.price.total.amount)
                     })
             }
             if (sortCriteria == 'time') {
@@ -115,7 +119,7 @@ function FrontPage() {
                         // В принципе можно было взять сумму.
                         const a_min = Math.min(a.flight.legs[0].duration, a.flight.legs[1].duration)
                         const b_min = Math.min(b.flight.legs[0].duration, b.flight.legs[1].duration)
-                        return a_min-b_min
+                        return a_min - b_min
                     })
             }
         }
@@ -129,7 +133,7 @@ function FrontPage() {
     }
 
     // для списка айдишников авиакомпаний
-    const airlineUids: string[] = []
+    // const airlineUids: string[] = []
 
     const flightsToDisplay = useMemo(
         () => defineFlightsToDisplay(
@@ -140,7 +144,7 @@ function FrontPage() {
             belowPrice,
             visibleElements,
             airlineUids
-            ),
+        ),
         [allFlights, sortCriteria, connections, fromPrice, belowPrice, visibleElements, airlineUids]
     );
 
@@ -156,12 +160,8 @@ function FrontPage() {
         )
             .then(res => res.json())
             .then(data => {
-                // console.log(data)
-                console.log(data.result)
+                setBestDirectFlights(data.result.bestPrices.DIRECT.bestFlights)
                 setAllFlights(data.result.flights)
-                setDisplayFlights(data.result.flights)
-                console.log(displayFlights)
-                console.log(displayFlights[0])
             })
             .catch(error => {
                 console.log(error)
@@ -202,6 +202,9 @@ function FrontPage() {
                     setFromPrice={setFromPrice}
                     belowPrice={belowPrice}
                     setBelowPrice={setBelowPrice}
+                    bestDirectFlights={bestDirectFlights}
+                    airlineUids={airlineUids}
+                    setAirlineUids={setAirlineUids}
                 />
                 <div style={{width: "100%"}}>
                     {flightsToDisplay && <List flightsToDisplay={flightsToDisplay}/>}

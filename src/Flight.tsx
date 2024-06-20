@@ -8,6 +8,7 @@ type Props = {
     item: IFlightWithToken;
 }
 
+// @ts-ignore
 function Flight(props: Props) {
     // console.log(props.item?.flight)
     const flight = props.item?.flight
@@ -51,7 +52,6 @@ function Flight(props: Props) {
             <p>
                 <span>{flight?.legs[0]?.segments[0]?.departureCity?.caption}, {flight?.legs[0]?.segments[0]?.departureAirport?.caption} ({flight?.legs[0]?.segments[0]?.departureAirport?.uid})</span>
                 <span><ArrowRightAltIcon/></span>
-
                 <span>{flight?.legs[0]?.segments.at(-1)?.arrivalCity?.caption}, {flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.caption} ({flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.uid})</span>
             </p>
             <div>

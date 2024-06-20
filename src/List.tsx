@@ -10,7 +10,7 @@ function List(props: Props) {
 
     return (
         <>
-            {props.flightsToDisplay && props.flightsToDisplay.map(flight => <Flight item={flight} />)}
+            {props.flightsToDisplay && props.flightsToDisplay.map(flight => <Flight key={flight.flightToken} item={flight} />)}
         </>
     )
 }
