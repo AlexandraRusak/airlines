@@ -37,8 +37,9 @@ function Flight(props: Props) {
     }
 
 
+
     return (
-        <Stack fullwidth sx={{marginBottom: "10px"}}>
+        <Stack sx={{marginBottom: "10px"}}>
             <Box className="blue">
                 <Typography sx={{color: "white"}}>{flight?.carrier?.caption}</Typography>
                 <div className="price">
@@ -83,9 +84,9 @@ function Flight(props: Props) {
                 </div>
                 <div className="hours-min">
                     <Typography
-                        sx={{color: "#0087C9"}}>{getDateAndMonth(flight?.legs[0]?.segments.at(-1)?.arrivalDate)}</Typography>
+                        sx={{color: "#0087C9"}}>{getDateAndMonth(`${flight?.legs[0]?.segments.at(-1)?.arrivalDate}`)}</Typography>
                     <Typography
-                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[0]?.segments.at(-1)?.arrivalDate)}</Typography>
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(`${flight?.legs[0]?.segments.at(-1)?.arrivalDate}`)}</Typography>
                 </div>
             </Box>
             <Box className="connection">
@@ -130,9 +131,9 @@ function Flight(props: Props) {
 
                 <div className="hours-min">
                     <Typography
-                        sx={{color: "#0087C9"}}>{getDateAndMonth(flight?.legs[1]?.segments.at(-1)?.arrivalDate)}</Typography>
+                        sx={{color: "#0087C9"}}>{getDateAndMonth(`${flight?.legs[1]?.segments.at(-1)?.arrivalDate}`)}</Typography>
                     <Typography
-                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[1]?.segments.at(-1)?.arrivalDate)}</Typography>
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(`${flight?.legs[1]?.segments.at(-1)?.arrivalDate}`)}</Typography>
                 </div>
             </Box>
             <Box className="connection">
