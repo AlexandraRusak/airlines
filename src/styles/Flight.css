@@ -1,0 +1,23 @@
+.blue {
+    width: 100%;
+    background-color: #0087C9;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 5px;
+    padding-block: 1px;
+}
+
+.price {
+    display: flex;
+    flex-flow: column;
+    align-items: end;
+}
+
+.price>p {
+    margin: 0;
+    padding: 0;
+}
+
+

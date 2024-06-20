@@ -1,5 +1,5 @@
-import {IBestFlight} from "./iBestFlight.tsx";
-
-export interface IDirectAndOneConnection {
-    bestFlights: IBestFlight[];
-}
+// import {IBestFlight} from "./iBestFlight.tsx";
+//
+// export interface IDirectAndOneConnection {
+//     bestFlights: IBestFlight[];
+// }
