@@ -3,7 +3,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import {Checkbox, Drawer, FormGroup} from "@mui/material";
+import {Checkbox, Drawer, FormGroup, Typography} from "@mui/material";
 import {makeStyles} from "@mui/styles";
 import {Dispatch, SetStateAction, useState} from "react";
 import "./styles/SideBar.css"
@@ -34,11 +34,10 @@ type Props = {
 
 function SideBar(props: Props) {
 
-   const [showDirect, setShowDirect] = useState<boolean>(false)
-   const [showOneConnection, setShowOneConnection] = useState<boolean>(false)
-   const [showAll, setShowAll] = useState<boolean>(true)
+    const [showDirect, setShowDirect] = useState<boolean>(false)
+    const [showOneConnection, setShowOneConnection] = useState<boolean>(false)
+    const [showAll, setShowAll] = useState<boolean>(true)
 
-    console.log(props.bestDirectFlights)
     const classes = useStyles()
     const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         props.setSortCriteria(event.target.value)
@@ -69,13 +68,13 @@ function SideBar(props: Props) {
         props.setBelowPrice(event.target.value)
     }
 
-    // TODO: заменить FormLabel на Typography
 
     return (
         <Drawer variant="permanent" anchor={"left"} sx={{width: 240, flexShrink: 0}}
                 classes={{paper: classes.drawerPaper}}>
             <FormControl>
-                <FormLabel id="sort" sx={{marginTop: 5, marginBottom: 1}}>Сортировать</FormLabel>
+                <Typography sx={{fontWeight: "500", marginBlock: "15px"}}>Сортировать</Typography>
+
                 <RadioGroup
                     aria-labelledby="sort"
                     defaultValue=""
@@ -83,27 +82,30 @@ function SideBar(props: Props) {
                     value={props.sortCriteria}
                     onChange={handleSortChange}
                 >
-                    <FormControlLabel value="priceAscending" control={<Radio/>} label="- по возрастанию цены"/>
-                    <FormControlLabel value="priceDescending" control={<Radio/>} label="- по убыванию в цене"/>
-                    <FormControlLabel value="time" control={<Radio/>} label="- по времени в пути"/>
+                    <FormControlLabel sx={{lineHeight: "0.9rem"}} value="priceAscending"
+                                      control={<Radio sx={{paddingBlock: "0"}}/>} label="- по возрастанию цены"/>
+                    <FormControlLabel value="priceDescending" control={<Radio sx={{paddingBlock: "0"}}/>}
+                                      label="- по убыванию в цене"/>
+                    <FormControlLabel value="time" control={<Radio sx={{paddingBlock: "0"}}/>}
+                                      label="- по времени в пути"/>
                 </RadioGroup>
             </FormControl>
 
             <FormControl>
-                <FormLabel id="filter" sx={{marginTop: 5, marginBottom: 1}}>Фильтровать</FormLabel>
+                <Typography sx={{fontWeight: "500", marginBlock: "15px"}}>Фильтровать</Typography>
                 <FormGroup>
                     <FormControlLabel
-                        control={<Checkbox value="1" checked={props.connections.includes("1")}
+                        control={<Checkbox sx={{paddingBlock: "0"}} value="1" checked={props.connections.includes("1")}
                                            onChange={handleConnectionsChange}/>}
                         label="- 1 пересадка"/>
                     <FormControlLabel
-                        control={<Checkbox value="0" checked={props.connections.includes("0")}
+                        control={<Checkbox sx={{paddingBlock: "0"}} value="0" checked={props.connections.includes("0")}
                                            onChange={handleConnectionsChange}/>}
                         label="- без пересадок"/>
                 </FormGroup>
             </FormControl>
 
-            <FormLabel sx={{marginTop: 5, marginBottom: 1}}>Цена</FormLabel>
+            <Typography sx={{fontWeight: "500", marginBlock: "15px"}}>Цена</Typography>
             <div className="container">
                 <div className="line">
                     <label htmlFor="fromPrice">от</label>
@@ -121,16 +123,18 @@ function SideBar(props: Props) {
 
 
             <FormControl>
-                <FormLabel id="filter" sx={{marginTop: 5, marginBottom: 1}}>Авиакомпании</FormLabel>
+                <Typography sx={{fontWeight: "500", marginBlock: "15px"}}>Авиакомпании</Typography>
                 <FormGroup>
 
                     {
                         props.bestDirectFlights && props.bestDirectFlights.map(
-                            (flight, index) => {return <FormControlLabel
-                                key={index}
-                                control={<Checkbox value={flight.carrier.uid}
-                                                   checked={props.airlineUids.includes(`${flight.carrier.uid}`)}
-                                                   onChange={handleAirlineChange}/>} label={flight.carrier.caption}/>})
+                            (flight, index) => {
+                                return <FormControlLabel
+                                    key={index}
+                                    control={<Checkbox sx={{paddingBlock: "0"}} value={flight.carrier.uid}
+                                                       checked={props.airlineUids.includes(`${flight.carrier.uid}`)}
+                                                       onChange={handleAirlineChange}/>} label={flight.carrier.caption}/>
+                            })
                     }
 
                 </FormGroup>

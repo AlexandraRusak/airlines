@@ -1,5 +1,5 @@
 import {IFlightWithToken} from "./interfaces/iFlightWithToken.tsx";
-import {Button, Container, Typography} from "@mui/material";
+import {Box, Button, Divider, Stack, Typography} from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import "./styles/Flight.css"
@@ -10,7 +10,6 @@ type Props = {
 
 // @ts-ignore
 function Flight(props: Props) {
-    // console.log(props.item?.flight)
     const flight = props.item?.flight
     const getDateAndMonth = (string: string): string => {
         const date1 = new Date(string)
@@ -40,55 +39,120 @@ function Flight(props: Props) {
 
 
     return (
-        <Container>
-            <div className="blue">
+        <Stack fullwidth sx={{marginBottom: "10px"}}>
+            <Box className="blue">
                 <Typography sx={{color: "white"}}>{flight?.carrier?.caption}</Typography>
                 <div className="price">
-                    <p><span>{flight?.price?.total?.amount}</span>
-                        <span>{flight?.price?.total?.currency}</span></p>
-                    <p>Стоимость для одного взрослого пассажира</p>
+                    <Typography variant="h6" sx={{
+                        fontWeight: "400",
+                        color: "white",
+                        paddingTop: "10px",
+                        marginBlockStart: "0px",
+                        marginBlockEnd: "0px",
+                        lineHeight: "1rem"
+                    }}>{flight?.price?.total?.amount} {flight?.price?.total?.currency}</Typography>
+                    <Typography variant="caption" sx={{color: "white", paddingTop: "0px", marginTop: "0px"}}>Стоимость
+                        для одного взрослого пассажира</Typography>
                 </div>
-            </div>
-            <p>
-                <span>{flight?.legs[0]?.segments[0]?.departureCity?.caption}, {flight?.legs[0]?.segments[0]?.departureAirport?.caption} ({flight?.legs[0]?.segments[0]?.departureAirport?.uid})</span>
-                <span><ArrowRightAltIcon/></span>
-                <span>{flight?.legs[0]?.segments.at(-1)?.arrivalCity?.caption}, {flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.caption} ({flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.uid})</span>
-            </p>
-            <div>
-                <p>
-                    <span>{getHoursAndMin(flight?.legs[0]?.segments[0]?.departureDate)} </span><span>{getDateAndMonth(flight?.legs[0]?.segments[0]?.departureDate)}</span>
-                </p>
-                <p>
+            </Box>
+            <Box className="destination">
+                <div>
+                    <Typography>{flight?.legs[0]?.segments[0]?.departureCity?.caption}, {flight?.legs[0]?.segments[0]?.departureAirport?.caption}
+                        <span style={{color: "#0087C9"}}> ({flight?.legs[0]?.segments[0]?.departureAirport?.uid})</span></Typography>
+                </div>
+                <ArrowRightAltIcon sx={{color: "#0087C9"}}/>
+                <div>
+                    <Typography>
+                        {flight?.legs[0]?.segments.at(-1)?.arrivalCity?.caption}, {flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.caption}
+                        <span
+                            style={{color: "#0087C9"}}> ({flight?.legs[0]?.segments.at(-1)?.arrivalAirport?.uid})</span>
+                    </Typography>
+                </div>
+            </Box>
+            <Divider></Divider>
+            <Box className="time">
+                <div className="hours-min">
+                    <Typography
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[0]?.segments[0]?.departureDate)}</Typography>
+                    <Typography
+                        sx={{color: "#0087C9"}}> {getDateAndMonth(flight?.legs[0]?.segments[0]?.departureDate)}</Typography>
+                </div>
+
+                <div style={{display: "flex"}}>
                     <AccessTimeIcon/>
-                    <span>{Math.floor(flight?.legs[0]?.duration / 60)}</span><span> ч </span><span>{(flight?.legs[0]?.duration - (Math.floor(flight?.legs[0]?.duration / 60)) * 60)}</span><span> мин </span>
-                </p>
-                <p>
-                    <span>{getHoursAndMin(flight?.legs[0]?.segments.at(-1)?.arrivalDate)} </span><span>{getDateAndMonth(flight?.legs[0]?.segments.at(-1)?.arrivalDate)} </span>
-                </p>
-            </div>
-            <p>{flight?.legs[0]?.segments.length / 2} пересадка</p>
-            <p>рейс выполняет: {flight?.carrier?.caption}</p>
-            <p>
-                <span>{flight?.legs[1]?.segments[0]?.departureCity?.caption}, {flight?.legs[1]?.segments[0]?.departureAirport?.caption} ({flight?.legs[1]?.segments[0]?.departureAirport?.uid})</span>
-                <span><ArrowRightAltIcon/></span>
-                <span>{flight?.legs[1]?.segments.at(-1)?.arrivalCity?.caption}, {flight?.legs[1]?.segments.at(-1)?.arrivalAirport?.caption} ({flight?.legs[1]?.segments.at(-1)?.arrivalAirport?.uid})</span>
-            </p>
-            <div>
-                <p>
-                    <span>{getHoursAndMin(flight?.legs[1]?.segments[0]?.departureDate)} </span><span>{getDateAndMonth(flight?.legs[1]?.segments[0]?.departureDate)}</span>
-                </p>
-                <p>
+                    <Typography>{Math.floor(flight?.legs[0]?.duration / 60)} ч {(flight?.legs[0]?.duration - (Math.floor(flight?.legs[0]?.duration / 60)) * 60)} мин</Typography>
+                </div>
+                <div className="hours-min">
+                    <Typography
+                        sx={{color: "#0087C9"}}>{getDateAndMonth(flight?.legs[0]?.segments.at(-1)?.arrivalDate)}</Typography>
+                    <Typography
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[0]?.segments.at(-1)?.arrivalDate)}</Typography>
+                </div>
+            </Box>
+            <Box className="connection">
+                {flight?.legs[0]?.segments.length > 1 ?
+                    <Divider sx={{
+                        "&::before, &::after": {
+                            borderColor: "rgba(0, 0, 0, 0.87)",
+                        },
+                    }}><Typography sx={{color: "#FFB168"}}>{flight?.legs[0]?.segments.length - 1} пересадка</Typography></Divider> : ""}
+            </Box>
+            <Typography sx={{paddingLeft: "15px"}}>Рейс выполняет: {flight?.carrier?.caption}</Typography>
+            <Divider sx={{bgcolor: "#0087C9", height: "1px"}}></Divider>
+
+
+            <Box className="destination">
+                <div>
+                    <Typography>{flight?.legs[1]?.segments[0]?.departureCity?.caption}, {flight?.legs[1]?.segments[0]?.departureAirport?.caption}
+                        <span style={{color: "#0087C9"}}> ({flight?.legs[1]?.segments[0]?.departureAirport?.uid})</span></Typography>
+                </div>
+                <ArrowRightAltIcon sx={{color: "#0087C9"}}/>
+                <div>
+                    <Typography>
+                        {flight?.legs[1]?.segments.at(-1)?.arrivalCity?.caption}, {flight?.legs[1]?.segments.at(-1)?.arrivalAirport?.caption}
+                        <span
+                            style={{color: "#0087C9"}}> ({flight?.legs[1]?.segments.at(-1)?.arrivalAirport?.uid})</span>
+                    </Typography>
+                </div>
+            </Box>
+            <Divider></Divider>
+            <Box className="time">
+
+                <div className="hours-min">
+                    <Typography
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[1]?.segments[0]?.departureDate)}</Typography>
+                    <Typography
+                        sx={{color: "#0087C9"}}>{getDateAndMonth(flight?.legs[1]?.segments[0]?.departureDate)}</Typography>
+                </div>
+                <div style={{display: "flex"}}>
                     <AccessTimeIcon/>
-                    <span>{Math.floor(flight?.legs[1]?.duration / 60)}</span><span> ч </span><span>{(flight?.legs[1]?.duration - (Math.floor(flight?.legs[1]?.duration / 60)) * 60)}</span><span> мин </span>
-                </p>
-                <p>
-                    <span>{getHoursAndMin(flight?.legs[1]?.segments.at(-1)?.arrivalDate)} </span><span>{getDateAndMonth(flight?.legs[1]?.segments.at(-1)?.arrivalDate)}</span>
-                </p>
-            </div>
-            <p>{flight?.legs[1]?.segments.length / 2} пересадка</p>
-            <p>рейс выполняет: {flight?.carrier?.caption}</p>
-            <Button sx={{backgroundColor: "#FFB168", color: "white", width: "100%", borderRadius: "0"}}>выбрать</Button>
-        </Container>
+                    <Typography>{Math.floor(flight?.legs[1]?.duration / 60)} ч {(flight?.legs[1]?.duration - (Math.floor(flight?.legs[1]?.duration / 60)) * 60)} мин</Typography>
+                </div>
+
+                <div className="hours-min">
+                    <Typography
+                        sx={{color: "#0087C9"}}>{getDateAndMonth(flight?.legs[1]?.segments.at(-1)?.arrivalDate)}</Typography>
+                    <Typography
+                        sx={{fontSize: "1.25rem"}}>{getHoursAndMin(flight?.legs[1]?.segments.at(-1)?.arrivalDate)}</Typography>
+                </div>
+            </Box>
+            <Box className="connection">
+                {flight?.legs[1]?.segments.length > 1 ?
+                    <Divider sx={{
+                        "&::before, &::after": {
+                            borderColor: "rgba(0, 0, 0, 0.87)",
+                        },
+                    }}><Typography sx={{color: "#FFB168"}}>{flight?.legs[1]?.segments.length - 1} пересадка</Typography></Divider> : ""}
+            </Box>
+            <Typography sx={{paddingLeft: "15px"}}>Рейс выполняет: {flight?.carrier?.caption}</Typography>
+            <Button fullWidth={true} disableRipple={true} disableElevation={true} disableFocusRipple={true} sx={{
+                backgroundColor: "#FFB168",
+                color: "white",
+                borderRadius: "0",
+                margin: "0",
+                "&:hover": {bgcolor: "#0087C9"},
+            }}>выбрать</Button>
+        </Stack>
     )
 
 }

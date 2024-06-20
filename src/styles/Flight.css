@@ -1,12 +1,11 @@
 .blue {
-    width: 100%;
     background-color: #0087C9;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-inline: 5px;
-    padding-block: 1px;
+    padding-block: 2px;
 }
 
 .price {
@@ -19,5 +18,25 @@
     margin: 0;
     padding: 0;
 }
+
+.destination, .time {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 15px;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.connection {
+    padding-inline: 40px;
+}
+
+.hours-min {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
 
 

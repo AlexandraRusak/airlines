@@ -17,7 +17,6 @@ function FrontPage() {
     const [connections, setConnections] = useState<string[]>([])
     const [visibleElements, setVisibleElements] = useState<number>(2)
     const [airlineUids, setAirlineUids] = useState<string[]>([])
-    // const [isLoading, setIsLoading] = useState(false);
 
     const handleShowMore = () => {
         setVisibleElements(visibleElements + 1)
@@ -135,16 +134,16 @@ function FrontPage() {
 
     // для списка айдишников авиакомпаний
     // const airlineUids: string[] = []
-    const uniqueAirlinesDirect = ()=>{
-        bestDirectFlights
-    }
-    const uniqueAirlinesOneConnection =() => {
-        bestOneConnection
-    }
-
-    const combinedAirlines = () => {
-
-    }
+    // const uniqueAirlinesDirect = ()=>{
+    //     bestDirectFlights
+    // }
+    // const uniqueAirlinesOneConnection =() => {
+    //     bestOneConnection
+    // }
+    //
+    // const combinedAirlines = () => {
+    //
+    // }
 
 
     const flightsToDisplay = useMemo(
@@ -180,28 +179,13 @@ function FrontPage() {
                 console.log(error)
             })
             .finally(() => {
-                // setIsLoading(false);
-            });
+                     });
 
     }
 
     useEffect(() => {
         getData()
     }, [])
-
-    console.log(sortCriteria)
-    console.log(connections)
-    console.log(fromPrice)
-    console.log(belowPrice)
-
-    // console.log(data)
-    // console.log(data?.flights)
-
-    // if (isLoading) {
-    //     return (
-    //         <Spinner/>
-    //     )
-    // }
 
     return (
         <Container>
@@ -220,8 +204,7 @@ function FrontPage() {
                     setAirlineUids={setAirlineUids}
                 />
                 <div style={{width: "100%"}}>
-                    {flightsToDisplay && <List flightsToDisplay={flightsToDisplay}/>}
-                    <Button onClick={handleShowMore}>показать еще</Button>
+                    {flightsToDisplay && <List flightsToDisplay={flightsToDisplay} handleShowMore={handleShowMore}/>}
                 </div>
             </div>
         </Container>
