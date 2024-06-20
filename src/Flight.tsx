@@ -8,7 +8,6 @@ type Props = {
     item: IFlightWithToken;
 }
 
-// @ts-ignore
 function Flight(props: Props) {
     const flight = props.item?.flight
     const getDateAndMonth = (string: string): string => {

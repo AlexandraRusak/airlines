@@ -2,10 +2,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import {Checkbox, Drawer, FormGroup, Typography} from "@mui/material";
 import {makeStyles} from "@mui/styles";
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, SetStateAction} from "react";
 import "./styles/SideBar.css"
 import {IBestFlight} from "./interfaces/iBestFlight.tsx";
 
@@ -27,16 +26,12 @@ type Props = {
     setFromPrice: Dispatch<SetStateAction<string>>;
     belowPrice: string;
     setBelowPrice: Dispatch<SetStateAction<string>>;
-    bestDirectFlights: IBestFlight[];
     airlineUids: string[];
     setAirlineUids: Dispatch<SetStateAction<string[]>>;
+    uniqueBestFligts: IBestFlight[];
 }
 
 function SideBar(props: Props) {
-
-    const [showDirect, setShowDirect] = useState<boolean>(false)
-    const [showOneConnection, setShowOneConnection] = useState<boolean>(false)
-    const [showAll, setShowAll] = useState<boolean>(true)
 
     const classes = useStyles()
     const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +62,6 @@ function SideBar(props: Props) {
     const handleBelowPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         props.setBelowPrice(event.target.value)
     }
-
 
     return (
         <Drawer variant="permanent" anchor={"left"} sx={{width: 240, flexShrink: 0}}
@@ -127,13 +121,14 @@ function SideBar(props: Props) {
                 <FormGroup>
 
                     {
-                        props.bestDirectFlights && props.bestDirectFlights.map(
+                        props.uniqueBestFligts.map(
                             (flight, index) => {
                                 return <FormControlLabel
                                     key={index}
                                     control={<Checkbox sx={{paddingBlock: "0"}} value={flight.carrier.uid}
                                                        checked={props.airlineUids.includes(`${flight.carrier.uid}`)}
-                                                       onChange={handleAirlineChange}/>} label={flight.carrier.caption}/>
+                                                       onChange={handleAirlineChange}/>}
+                                    label={`${flight.carrier.caption} от ${flight.price.amount} р.`}/>
                             })
                     }
 

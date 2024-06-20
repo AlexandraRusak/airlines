@@ -1,6 +1,5 @@
 import {IFlightWithToken} from "./interfaces/iFlightWithToken.tsx";
 import {Flight} from "./Flight.tsx";
-import {Button} from "@mui/material";
 
 
 type Props = {

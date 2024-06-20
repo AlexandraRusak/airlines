@@ -2,8 +2,7 @@ import {SideBar} from "./SideBar.tsx";
 import {List} from "./List.tsx";
 import {useEffect, useMemo, useState} from "react";
 import {IFlightWithToken} from "./interfaces/iFlightWithToken.tsx";
-// import {Spinner} from "./Spinner.tsx";
-import {Button, Container} from "@mui/material";
+import {Container} from "@mui/material";
 import {IBestFlight} from "./interfaces/iBestFlight.tsx";
 
 function FrontPage() {
@@ -62,20 +61,12 @@ function FrontPage() {
         airlineUids: string[]) => {
         let filteredFlights: IFlightWithToken[] = allFlights
 
-        // Флаги не сделаны. Заделка на неактивные элементы в sidebar
-        // const flags = {
-        //     "connectedHasFlights" : [],
-        //     "airlinesHasFlights" : [],
-        // }
-
-        // Фильтрация по пересадкам
         if (connections.length > 0) {
             filteredFlights = filterConnections(
                 filteredFlights,
                 connections)
         }
 
-        // Фильтрация по стоимости
         let fromPriceNumber = 0
         let belowPriceNumber = 999999999
         if (fromPrice) {
@@ -91,14 +82,12 @@ function FrontPage() {
                 belowPriceNumber)
         }
 
-        // Фильтрация по авиакомпаниям
         if (airlineUids.length > 0) {
             filteredFlights = filterAirlines(
                 filteredFlights,
                 airlineUids)
         }
 
-        // Сортировка
         if (sortCriteria) {
             if (sortCriteria == 'priceAscending') {
                 filteredFlights = filteredFlights.sort(
@@ -115,35 +104,49 @@ function FrontPage() {
             if (sortCriteria == 'time') {
                 filteredFlights = filteredFlights.sort(
                     (a, b) => {
-                        // Так как время перелета есть туда и обратно, то будем брать минимальное из двух значений
-                        // В принципе можно было взять сумму.
                         const a_min = Math.min(a.flight.legs[0].duration, a.flight.legs[1].duration)
                         const b_min = Math.min(b.flight.legs[0].duration, b.flight.legs[1].duration)
                         return a_min - b_min
                     })
             }
         }
-
-        // const result = {
-        //     "flights": filteredFlights.slice(0, elements),
-        //     "flags": flags,
-        // }
-        // console.log(result)
         return filteredFlights.slice(0, elements)
     }
 
-    // для списка айдишников авиакомпаний
-    // const airlineUids: string[] = []
-    // const uniqueAirlinesDirect = ()=>{
-    //     bestDirectFlights
-    // }
-    // const uniqueAirlinesOneConnection =() => {
-    //     bestOneConnection
-    // }
-    //
-    // const combinedAirlines = () => {
-    //
-    // }
+    const onlyUnique = (bestFlights: IBestFlight[]) => {
+        const uniqueAirlines: IBestFlight[] = [];
+        const airlineIds: Set<string> = new Set();
+
+        bestFlights.forEach((flight) => {
+            if (!airlineIds.has(flight.carrier.uid)) {
+                airlineIds.add(flight.carrier.uid);
+                uniqueAirlines.push(flight);
+            } else {
+                const existingFlight = uniqueAirlines.find(
+                    (uniqueFlight) => uniqueFlight.carrier.uid === flight.carrier.uid
+                );
+                if (existingFlight && Number(flight.price.amount) < Number(existingFlight.price.amount)) {
+                    existingFlight.price = flight.price;
+                }
+            }
+        });
+        return uniqueAirlines;
+    };
+
+    let bestFligts: IBestFlight[] = []
+
+    if (connections.length > 0) {
+        if (connections.includes('1')) {
+            bestFligts = bestFligts.concat(bestOneConnection)
+        }
+        if (connections.includes('0')) {
+            bestFligts = bestFligts.concat(bestDirectFlights)
+        }
+    } else {
+        bestFligts = bestDirectFlights.concat(bestOneConnection)
+    }
+
+    const uniqueBestFligts = onlyUnique(bestFligts)
 
 
     const flightsToDisplay = useMemo(
@@ -179,7 +182,7 @@ function FrontPage() {
                 console.log(error)
             })
             .finally(() => {
-                     });
+            });
 
     }
 
@@ -199,9 +202,9 @@ function FrontPage() {
                     setFromPrice={setFromPrice}
                     belowPrice={belowPrice}
                     setBelowPrice={setBelowPrice}
-                    bestDirectFlights={bestDirectFlights}
                     airlineUids={airlineUids}
                     setAirlineUids={setAirlineUids}
+                    uniqueBestFligts={uniqueBestFligts}
                 />
                 <div style={{width: "100%"}}>
                     {flightsToDisplay && <List flightsToDisplay={flightsToDisplay} handleShowMore={handleShowMore}/>}
